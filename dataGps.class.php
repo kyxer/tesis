@@ -10,26 +10,19 @@ require_once "ActiveMongo/lib/ActiveMongo.php";
 class dataGps extends ActiveMongo {
 
     public 
-    $latitude, 
-    $longitude, 
-    $altitude, 
-    $accuracy,
-    $altitudeAccuracy,
-    $heading, 
-    $speed;
+    $latitud, 
+    $longitud,  
+    $presicion,
+    $tiempo;
 
    
 
-    public function __construct($latitude, $longitude, $altitude, $accuracy, $altitudeAccuracy, $heading, $speed) {
+    public function __construct($latitud, $longitud, $presicion, $tiempo) {
 
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
-        $this->altitude = $altitude;
-        $this->accuracy = $accuracy;
-        $this->altitudeAccuracy = $altitudeAccuracy;
-        $this->heading = $heading;
-        $this->speed = $speed;
-
+        $this->latitud = $latitud;
+        $this->longitud = $longitud;
+        $this->presicion = $presicion;
+        $this->tiempo = $tiempo;
         $time = time();
         $this->createdAt = $time;
         $this->updateAt = $time;
