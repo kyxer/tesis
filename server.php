@@ -1,7 +1,7 @@
 <?php
 	$json = file_get_contents('php://input');
 	$data = json_decode($json, true);
-	//echo var_dump($data);
+//echo var_dump($data);
 	
 	require_once "ActiveMongo/lib/ActiveMongo.php";
 	require_once "dataGps.class.php";
@@ -26,12 +26,15 @@
 
 	//Obtener parametros via POST
 	ActiveMongo::connect(MONGODBNAME, MONGODBSERVER);
+	
 	foreach($data as $val) {
+		
 		$latitud = $val["latitud"];
 		$longitud = $val["longitud"];
 		$presicion = $val["presicion"];
 		$tiempo = $val["tiempo"];
 		$registro = new dataGps($latitud, $longitud, $presicion, $tiempo);
+
 		$registro->save();
 
 	}
