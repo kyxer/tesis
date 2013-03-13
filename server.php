@@ -31,7 +31,9 @@
 		$longitud = $val["longitud"];
 		$presicion = $val["presicion"];
 		$tiempo = $val["tiempo"];
-		$registro = new dataGps($latitud, $longitud, $presicion, $tiempo);
+		$proveedor = $val["proveedor"];
+		$dispositivo = $val["dispositivo"];
+		$registro = new dataGps($latitud, $longitud, $presicion, $tiempo, $proveedor, $dispositivo);
 		$registro->save();
 
 	}
