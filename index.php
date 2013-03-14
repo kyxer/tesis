@@ -1,95 +1,69 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-
-        <!-- Add your site or application content here -->
-        <h1>Datos</h1>
-        <p>
-        	<label>Latitude</label>:
-        	<input type="text" id="latitude"/>
-        </p>
-        <p>
-        	<label>Longitude</label>:
-        	<input type="text" id="longitude" />
-        </p>
-        <p>
-        	<label>Altitude</label>:
-        	<input type="text" id="altitude" />
-        </p>
-        <p>
-        	<label>Accuracy</label>:
-        	<input type="text" id="accuracy" />
-        </p>
-        <p>
-        	<label>Altitude Accuracy</label>:
-        	<input type="text" id="altitudeAccuracy" />
-        </p>
-        <p>
-        	<label>Heading</label>:
-        	<input type="text" id="heading" />
-        </p>
-        <p>
-        	<label>Speed</label>:
-        	<input type="text" id="speed" />
-        </p>
-        <p>
-        	<button type="button" id="enviar">Enviar</button>
-        </p>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 500px }
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB625fM8VwIPW6tTcyXJ5tN0SGiY7GL1r4&sensor=false&call">
+    </script>
+  </head>
+  <body>
+    <div id="map_canvas" style="width:100%; height:500px"></div>
+  </body>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function initialize(data) {
+      console.log(arguments);
+      var markers = [];
+      var mapOptions = {
+        center: new google.maps.LatLng(data[0].latitud, data[0].longitud),
+        zoom: 8,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
 
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
-        <script>
-        	$(document).ready(function(){
+    for(var i = 0; i<data.length; i++){
 
-        		$("#enviar").on("click", function(){
-        			$.ajax({
-                        url: "server.php",
-                        type: "POST",
-                        dataType: "json",
-                        data: { 
-                        	"data":{
-                        		0:{
-	                        		latitude: $("#latitude").val(),
-	                        		longitude: $("#longitude").val(),
-	                        		altitude: $("#altitude").val(),
-	                        		accuracy: $("#accuracy").val(),
-	                        		altitudeAccuracy: $("#altitudeAccuracy").val(),
-	                        		heading: $("#heading").val(),
-	                        		speed: $("#speed").val()
-                        		}
-                        	}
-                        }
-                        ,
-                        success: function(data){
-                                                  
-                         	alert("exito");
-                        },
-                        error: function(data){
-                            console.log('error');
-                        }
-                
-                    });  
-        		});
+      current = new google.maps.LatLng(data[i].latitud, data[i].longitud);
+      myloc = "Lat "+data[i].latitud+" Lon "+data[i].longitud;
+      markers.push(new google.maps.Marker({
+          map: map,
+          position: current,
+          title: myloc
+      }));
+      markers[i]['infowin'] = new google.maps.InfoWindow({
+        content: '<div>This is a marker in ' + myloc + '</div>'
+      });
 
-        	});
-        </script>
-    </body>
+      google.maps.event.addListener(markers[i], 'click', function() {
+        this['infowin'].open(map, this);
+    });
+
+    }
+  }
+    $(document).ready(function(){
+        var DATA;
+        $.ajax({ url: "show.php", type: "GET", dataType: "json", success: function(data){
+                    DATA = data;
+                    initialize(data)
+                  },
+                  error: function(data){
+                      console.log(arguments);
+                  }
+          
+              });  
+     
+
+    });
+  </script>
+
 </html>

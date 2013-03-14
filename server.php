@@ -41,8 +41,9 @@
 
 	}
 	}catch(Exception $e){
-		return print($e->toString());
+		return print($e->getMessage());
 	}
 	
 	return print("200");
+
 ?>
