@@ -1177,7 +1177,7 @@ abstract class ActiveMongo implements Iterator, Countable, ArrayAccess
             }
         } else {
             
-            $conn->insert($document, $async);
+            $conn->insert($document, array("async"=>$async));
             $this->setResult($document);
         }
 

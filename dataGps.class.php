@@ -12,16 +12,17 @@ class dataGps extends ActiveMongo {
     public 
     $latitud, 
     $longitud,  
-    $presicion,
-    $tiempo;
-
+    $tiempo,
+    $proveedor,
+    $precision,
+    $dispositivo;
    
 
-    public function __construct($latitud, $longitud, $presicion, $tiempo, $proveedor, $dispositivo) {
+    public function __construct($latitud, $longitud, $precision, $tiempo, $proveedor, $dispositivo) {
 
         $this->latitud = $latitud;
         $this->longitud = $longitud;
-        $this->presicion = $presicion;
+        $this->precision = $precision;
         $this->tiempo = $tiempo;
         $this->proveedor = $proveedor;
         $this->dispositivo = $dispositivo;
