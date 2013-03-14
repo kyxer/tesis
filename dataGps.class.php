@@ -17,7 +17,7 @@ class dataGps extends ActiveMongo {
 
    
 
-    public function __construct($latitud, $longitud, $presicion, $tiempo, $proveedor, $dispositivo) {
+    public function __construct($latitud=null, $longitud=null, $presicion=null, $tiempo=null, $proveedor=null, $dispositivo=null) {
 
         $this->latitud = $latitud;
         $this->longitud = $longitud;
@@ -35,5 +35,26 @@ class dataGps extends ActiveMongo {
     function getCollectionName() {
         return 'dataGps';
     }
+
+    public function toArray($results){
+            $values  = array();
+            $results = iterator_to_array($results);
+            foreach ($results as $result) {
+                $result["id"] = $result["_id"]->{'$id'};
+                unset($result["_id"]);
+                array_push($values, $result);
+            }
+
+            return $values;
+    }
+
+    public function listData($page_start_index, $page_size){
+
+        $results = $this->_getCollection()->find();
+        $results->skip($page_start_index * $page_size)->limit($page_size);
+        $results->sort(array("createdAt" => -1));
+        return $this->toArray($results);
+    }
+
 
 }
