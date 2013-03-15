@@ -69,7 +69,7 @@
     for(var i = 0; i<data.length; i++){
 
       current = new google.maps.LatLng(data[i].latitud, data[i].longitud);
-      myloc = "Lat "+data[i].latitud+" Lon "+data[i].longitud;
+      myloc = "Lat "+data[i].latitud+" Lon "+data[i].longitud+" Pres: "+ data[i].precision;
       markers.push(new google.maps.Marker({
           map: map,
           position: current,
