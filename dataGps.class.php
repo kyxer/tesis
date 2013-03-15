@@ -48,12 +48,20 @@ class dataGps extends ActiveMongo {
             return $values;
     }
 
-    public function listData($page_start_index, $page_size){
+    public function listData($page_start_index, $page_size, $dispositivo){
 
-        $results = $this->_getCollection()->find();
+        $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo));
         $results->skip($page_start_index * $page_size)->limit($page_size);
         $results->sort(array("createdAt" => -1));
         return $this->toArray($results);
+    }
+
+    public function diferenteDispositivo($command){
+
+        $results = $this->_getConnection()->command($command);
+
+        return $results["values"];
+
     }
 
 
