@@ -1,5 +1,12 @@
+<?php 
+  require_once "ActiveMongo/lib/ActiveMongo.php";
+  require_once "dataGps.class.php";
+  ActiveMongo::connect("tesis", "localhost");
+  $registro = new dataGps();
+  $diff = $registro->diferenteDispositivo(array("distinct" => "dataGps", "key" => "dispositivo"));
+?>
 <!DOCTYPE html>
-<html>
+<html style="color: #04819E; font-family:'Arial', Verdana, sans-serif">
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
@@ -12,14 +19,42 @@
     </script>
   </head>
   <body>
-    <div id="map_canvas" style="width:100%; height:500px"></div>
+    <div id="map_canvas" style="width:100%; height:500px">
+        <h1 style="text-align: center;">ELIJA LOS DATOS A GRAFICAR</h1>
+    </div>
+    <div style="height:200px; width:100%; float:left; text-align:center;">
+        <h1>Data para graficar</h1>
+        <p>
+          <label style="color: #FF9F40">Numero de puntos: </label><input id="puntos" type="text" />
+        </p>
+        <p>
+        <label>Indica el numero de marcas que aparecera en el mapa, <span style="font-weight: bold; color: #A65200">seran graficados los mas recientes capturados</span></label>
+        </p>
+        <p>
+          <label style="color: #FF9F40">Inicio de los puntos: </label><input value="0" id="pagina" type="text" />
+        </p>
+        <p>
+        <label>Indica el a partir de que pagina de la base de datos se graficaran</label>
+        </p>
+        <p><label style="color: #FF9F40">Dispositivo: </label><select id="dispositivo" name="dispositivo">
+          <?php 
+            foreach ($diff as $value) {
+              echo "<option value='$value' >$value</option>";
+            }
+          ?>
+        </select> </p>
+        <p><label>Indica el telefono o equipo que capturo los puntos</label></p>
+        <p>
+          <input id="graficar" style="font-size:18px;" value = "Graficar" type="button" />
+        </p>
+    </div>
   </body>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
   <script>
-    function initialize(data) {
+  function initialize(data) {
       console.log(arguments);
       var markers = [];
       var mapOptions = {
@@ -50,17 +85,43 @@
 
     }
   }
+
+
     $(document).ready(function(){
-        var DATA;
-        $.ajax({ url: "show.php", type: "GET", dataType: "json", success: function(data){
-                    DATA = data;
-                    initialize(data)
-                  },
-                  error: function(data){
-                      console.log(arguments);
-                  }
+        $("#graficar").on("click", function(){
+          var dispositivo, puntos;
+          dispositivo = $("#dispositivo").val();
+          puntos = $("#puntos").val();
+          pagina = $("#pagina").val();
+          if(!$.isNumeric(puntos)){
+            alert("Puntos debe ser un numero");
+          }else{
+            if(!$.isNumeric(pagina)){ 
+              alert("Pagina debe ser un numero");
+            }else{
+              if(puntos < 0) 
+              puntos *= -1;
+              puntos|= 0;
+              if(pagina < 0) 
+                  pagina*= -1;
+                  pagina|= 0;
+
+              $.ajax({ url: "show.php", type: "GET", data:{puntos:puntos, pagina: pagina,dispositivo:dispositivo}, dataType: "json", success: function(data){
+              initialize(data)
+              },
+              error: function(data){
+                  console.log(arguments);
+              }});
+
+            }
+            
+
+          }
           
-              });  
+
+
+        });
+          
      
 
     });
