@@ -31,11 +31,12 @@
 		
 		$latitud = $val["latitud"];
 		$longitud = $val["longitud"];
+		$altitud = $val["altitud"];
 		$precision = $val["precision"];
 		$tiempo = $val["tiempo"];
 		$proveedor = $val["proveedor"];
 		$dispositivo = $val["dispositivo"];
-		$registro = new dataGps($latitud, $longitud, $precision, $tiempo, $proveedor, $dispositivo);
+		$registro = new dataGps($latitud, $longitud, $altitud, $precision, $tiempo, $proveedor, $dispositivo);
 
 		$registro->save();
 
