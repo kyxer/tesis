@@ -23,7 +23,9 @@
         <h1 style="text-align: center;">ELIJA LOS DATOS A GRAFICAR</h1>
     </div>
     <div style="height:200px; width:100%; float:left; text-align:center;">
-        <h1>Data para graficar</h1>
+      <p>
+        <h1>Data para graficar --- <a style="color:black" href="descargar.php">Descargar DATA</a> </h1>
+
         <p>
           <label style="color: #FF9F40">Numero de puntos: </label><input id="puntos" type="text" />
         </p>
@@ -106,7 +108,7 @@
                   pagina*= -1;
                   pagina|= 0;
 
-              $.ajax({ url: "show.php", type: "GET", data:{puntos:puntos, pagina: pagina,dispositivo:dispositivo}, dataType: "json", success: function(data){
+              $.ajax({ url: "show.php", type: "GET", data:{puntos:puntos, pagina: pagina,dispositivo:dispositivo, section:"index"}, dataType: "json", success: function(data){
               initialize(data)
               },
               error: function(data){
