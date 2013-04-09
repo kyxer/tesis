@@ -113,7 +113,7 @@
             cantidadPuntos*= -1;
           cantidadPuntos|= 0;
 
-          window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&section=descarga";
+          window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&section=descarga";
 
         }
 
