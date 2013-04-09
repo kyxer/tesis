@@ -58,8 +58,9 @@
 			//iteramos para los resultados
 			$objPHPExcel->getActiveSheet()->SetCellValue("A1", "Latitud" );
 		    $objPHPExcel->getActiveSheet()->SetCellValue("B1", "Longitud");
-		    $objPHPExcel->getActiveSheet()->setCellValue("C1", "Precision");
-		    $objPHPExcel->getActiveSheet()->setCellValue("D1", "Tiempo");
+		    $objPHPExcel->getActiveSheet()->setCellValue("C1", "Altitud");
+		    $objPHPExcel->getActiveSheet()->setCellValue("D1", "Precision");
+		    $objPHPExcel->getActiveSheet()->setCellValue("E1", "Tiempo");
 		    $i = 2;
 			foreach($data as $row){
 				$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
@@ -69,8 +70,14 @@
 		    	else
 		    		$precision = $row["presicion"];
 
-		    	$objPHPExcel->getActiveSheet()->setCellValue("C".$i, $precision);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $row["tiempo"]);
+		    	if(isset($row["altitud"]))
+		    		$altitud = $row["altitud"];
+		    	else
+		    		$altitud = "";
+
+		    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("E".$i, $row["tiempo"]);
 		    	$i++;
 			}
 
