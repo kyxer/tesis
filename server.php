@@ -33,7 +33,7 @@
 		$longitud = $val["longitud"];
 		$altitud = $val["altitud"];
 		$precision = $val["precision"];
-		$tiempo = $val["tiempo"];
+		$tiempo = (string)$val["tiempo"];
 		$proveedor = $val["proveedor"];
 		$dispositivo = $val["dispositivo"];
 		$registro = new dataGps($latitud, $longitud, $altitud, $precision, $tiempo, $proveedor, $dispositivo);

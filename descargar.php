@@ -20,8 +20,10 @@
       }
     </style>
    <body>
+
     <div id="container" style="position:relative; left:50%; top:50%; height:auto; width:800px; margin-left:-400px; margin-top:100px;">
-        <h1>Datos a descargar --- <a style="color:black" href="index.php">Graficar Data</a></h1>
+        <h1><?php echo PHP_INT_MAX ?></h1>
+        <h1>Datos a descargar --- <a style="color:black" href="index.php">Grafic Data</a></h1>
         <p><label>Seleccione dispositivo:</label>
           <select id="dispositivo" name="dispositivo">
             <option value="">Seleccione</option>
