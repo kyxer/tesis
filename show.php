@@ -67,6 +67,7 @@
 		    $objPHPExcel->getActiveSheet()->setCellValue("G1", "Direccion");
 		    $objPHPExcel->getActiveSheet()->setCellValue("H1", "Tiempo de Captura");
 		    $objPHPExcel->getActiveSheet()->setCellValue("I1", "Tiempo");
+		    $objPHPExcel->getActiveSheet()->setCellValue("J1", "Tiempo entendible");
 		    $i = 2;
 			foreach($data as $row){
 				$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
@@ -87,7 +88,9 @@
 		    	$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $row["velocidad"]);
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("G".$i, $row["direccion"]);
 		    	$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $row["tiempoCaptura"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
+
+		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempo"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
 		    	$i++;
 			}
 
