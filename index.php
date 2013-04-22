@@ -39,12 +39,18 @@
         <label>Indica el a partir de que pagina de la base de datos se graficaran</label>
         </p>
         <p><label style="color: #FF9F40">Dispositivo: </label><select id="dispositivo" name="dispositivo">
+          <option value="">Seleccione</option>
           <?php 
             foreach ($diff as $value) {
+
               echo "<option value='$value' >$value</option>";
             }
           ?>
-        </select> </p>
+        </select>
+        <label>-----</label>
+        <label style="color: #FF9F40">Tiempo de captura: <label id="contTiempoCaptura"></label></label>
+        
+      </p>
         <p><label>Indica el telefono o equipo que capturo los puntos</label></p>
         <p>
           <input id="graficar" style="font-size:18px;" value = "Graficar" type="button" />
@@ -89,35 +95,61 @@
   }
 
 
+    $("#dispositivo").on("change", function(){
+      var val = $(this).val();
+      if(val != ""){
+        $.ajax({ url: "show.php", type: "GET", 
+          data:{dispositivo:val, section:"tiempoCaptura"}, 
+          dataType: "json", 
+          success: function(data){
+            var $sel = $("#contTiempoCaptura"),
+            html = "<select id='tiempoCaptura'>"
+            $.each(data["tiempoCaptura"], function(key, val){
+              html +="<option value="+val+">"+val+"</option>";
+            });
+            $sel.html(html);
+          }
+        });
+      }
+      
+    });
+
+
     $(document).ready(function(){
         $("#graficar").on("click", function(){
-          var dispositivo, puntos;
+          var dispositivo, puntos, tiempoCaptura;
+          tiempoCaptura = $("#tiempoCaptura").val();
           dispositivo = $("#dispositivo").val();
           puntos = $("#puntos").val();
           pagina = $("#pagina").val();
-          if(!$.isNumeric(puntos)){
-            alert("Puntos debe ser un numero");
+          if(dispositivo == ""){
+            alert("Debe seleccionar un dispositivo");
           }else{
-            if(!$.isNumeric(pagina)){ 
-              alert("Pagina debe ser un numero");
+            if(!$.isNumeric(puntos)){
+              alert("Puntos debe ser un numero");
             }else{
-              if(puntos < 0) 
-              puntos *= -1;
-              puntos|= 0;
-              if(pagina < 0) 
-                  pagina*= -1;
-                  pagina|= 0;
+              if(!$.isNumeric(pagina)){ 
+                alert("Pagina debe ser un numero");
+              }else{
+                if(puntos < 0) 
+                puntos *= -1;
+                puntos|= 0;
+                if(pagina < 0) 
+                    pagina*= -1;
+                    pagina|= 0;
 
-              $.ajax({ url: "show.php", type: "GET", data:{puntos:puntos, pagina: pagina,dispositivo:dispositivo, section:"index"}, dataType: "json", success: function(data){
-              initialize(data)
-              },
-              error: function(data){
-                  console.log(arguments);
-              }});
+                //$("body").append("<div style='position:absolute; background:white; opacity:.8; width:100%: height:100%;' id='bg'><h1>Cargando</h1><</div>");
+                $.ajax({ url: "show.php", type: "GET", data:{tiempoCaptura: tiempoCaptura, puntos:puntos, pagina: pagina,dispositivo:dispositivo, section:"index"}, dataType: "json", success: function(data){
+                  initialize(data);
+                  //$("#bg").remove();
+                },
+                error: function(data){
+                  //$("#bg").remove();
+                    console.log(arguments);
+                }});
 
+              }
             }
-            
-
           }
           
 

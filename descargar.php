@@ -23,7 +23,7 @@
 
     <div id="container" style="position:relative; left:50%; top:50%; height:auto; width:800px; margin-left:-400px; margin-top:100px;">
         <!--<h1><?php echo PHP_INT_MAX ?></h1> -->
-        <h1>Datos a descargar --- <a style="color:black" href="index.php">Grafic Data</a></h1>
+        <h1>Datos a descargar --- <a style="color:black" href="index.php">Graficar Data</a></h1>
         <p><label>Seleccione dispositivo:</label>
           <select id="dispositivo" name="dispositivo">
             <option value="">Seleccione</option>
@@ -33,8 +33,10 @@
             }
           ?>
         </select>
-        <label>Total de puntos existentes:</label><label id="tPuntos" style="color: black; margin-left:20px">0</label>
+        <label>-----</label>
+        <label>Tiempo de captura: <label id="contTiempoCaptura"></label></label>
         </p>
+        <p><label>Total de puntos existentes:</label><label id="tPuntos" style="color: black; margin-left:20px">0</label></p>
         <p><label>Limite inferior:</label> <input id="limiteInferior" type="text" /></p>
         <p><label>Cantidad de puntos:</label> <input id="cantidadPuntos" type="text" /></p>
         <p style="text-align:center"><input id="bDescarga" type="button" value="Descargar" /></p>
@@ -54,7 +56,31 @@
         if(dispositivo == ""){
           alert("Recuerde seleccionar un dispositivo");
         }else{
-          $.ajax({ url: "show.php", type: "GET", data:{dispositivo:dispositivo, section:"count"}, dataType: "json", success: function(data){
+            $.ajax({ url: "show.php", type: "GET", 
+              data:{dispositivo:dispositivo, section:"tiempoCaptura"}, 
+              dataType: "json", 
+              success: function(data){
+                
+                var $sel = $("#contTiempoCaptura"),
+                html = "<select id='tiempoCaptura'>"
+                $.each(data["tiempoCaptura"], function(key, val){
+                  html +="<option value="+val+">"+val+"</option>";
+                });
+                $sel.html(html);
+                findTotal(dispositivo, data["tiempoCaptura"][0]);
+              }
+              
+            });          
+        } 
+
+      });
+      $("#tiempoCaptura").live("change",function(){
+          var dispositivo = $("#dispositivo").val(), tiempoCaptura = $(this).val();
+          findTotal(dispositivo, tiempoCaptura);
+      });
+
+      var findTotal = function (dispositivo, tiempoCaptura) {
+        $.ajax({ url: "show.php", type: "GET", data:{tiempoCaptura:tiempoCaptura ,dispositivo:dispositivo, section:"count"}, dataType: "json", success: function(data){
                 
                 $("#tPuntos").html(data.count);
                 __CANTIDADPUNTOS = data.count;
@@ -72,14 +98,13 @@
               error: function(data){
                   console.log(arguments);
               }});
-        } 
-
-      });
+      }
 
       $("#bDescarga").on("click", function(){
         var dispositivo = $("#dispositivo").val(), 
         limiteInferior = $("#limiteInferior").val(), 
         cantidadPuntos = $("#cantidadPuntos").val(),
+        tiempoCaptura = $("#tiempoCaptura").val(),
         isValid = true;
 
         if(!$.isNumeric(cantidadPuntos)){
@@ -115,7 +140,8 @@
             cantidadPuntos*= -1;
           cantidadPuntos|= 0;
 
-          window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&section=descarga";
+          //window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
+          window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
 
         }
 

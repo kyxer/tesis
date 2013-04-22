@@ -20,9 +20,10 @@ class dataGps extends ActiveMongo {
     $tiempoCaptura,
     $velocidad,
     $direccion,
+    $tiempoEntendible,
     $tiempo;
    
-    public function __construct($latitud=null, $longitud=null, $altitud=null, $presicion=null, $tiempo=null, $proveedor=null, $dispositivo=null, $direccion=null, $velocidad =null, $distancia= null, $tiempoCaptura = null) {
+    public function __construct($latitud=null, $longitud=null, $altitud=null, $presicion=null, $tiempo=null, $tiempoEntendible = null, $proveedor=null, $dispositivo=null, $direccion=null, $velocidad =null, $distancia= null, $tiempoCaptura = null) {
 
 
         $this->latitud = $latitud;
@@ -30,6 +31,7 @@ class dataGps extends ActiveMongo {
         $this->altitud = $altitud;
         $this->precision = $presicion;
         $this->tiempo = $tiempo;
+        $this->tiempoEntendible = $tiempoEntendible;
         $this->proveedor = $proveedor;
         $this->dispositivo = $dispositivo;
         $this->distancia = $distancia;
@@ -59,11 +61,11 @@ class dataGps extends ActiveMongo {
             return $values;
     }
 
-    public function listData($page_start_index, $page_size, $dispositivo){
+    public function listData($page_start_index, $page_size, $dispositivo, $tiempoCaptura){
 
-        $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo));
+        $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo, "tiempoCaptura"=>$tiempoCaptura));
         $results->skip($page_start_index * $page_size)->limit($page_size);
-        $results->sort(array("createdAt" => -1));
+        $results->sort(array("tiempo" => -1));
         return $this->toArray($results);
     }
 
@@ -75,8 +77,9 @@ class dataGps extends ActiveMongo {
 
     }
 
-    public function totalDispositivo($dispositivo){
-        return $this->_getCollection()->find(array("dispositivo"=>$dispositivo))->count();
+
+    public function totalDispositivo($dispositivo, $tiempoCaptura){
+        return $this->_getCollection()->find(array("dispositivo"=>$dispositivo, "tiempoCaptura"=>$tiempoCaptura))->count();
     }
 
     public function listDataRange($limiteInferior, $cantidadPuntos, $dispositivo){

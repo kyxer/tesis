@@ -14,6 +14,8 @@
 		$pageSize = (int)$_GET["puntos"];
 	if(isset($_GET["dispositivo"]))
 		$dispositivo = $_GET["dispositivo"];
+	if(isset($_GET["tiempoCaptura"]))
+		$tiempoCaptura = $_GET["tiempoCaptura"];
 	if(isset($_GET["limiteInferior"]))
 		$limiteInferior = $_GET["limiteInferior"];
 	if(isset($_GET["cantidadPuntos"]))
@@ -28,21 +30,21 @@
 
 	switch ($section) {
 		case "index":
-			$data = $dataGps->listData($pageIndex,$pageSize,$dispositivo);
+			$data = $dataGps->listData($pageIndex,$pageSize,$dispositivo, $tiempoCaptura);
 			break;
 		
 		case "count":
 			require_once("historial.class.php");
-			$data["count"] = $dataGps->totalDispositivo($dispositivo);
+			$data["count"] = $dataGps->totalDispositivo($dispositivo, $tiempoCaptura);
 			$historial = new historial();
-			$data["historial"] = $historial->listData($dispositivo);
+			$data["historial"] = $historial->listData($dispositivo, $tiempoCaptura);
 			break;
 
 		case "descarga":
 			require_once("excel/PHPExcel.php");
 			require_once("historial.class.php");
 			require_once("excel/PHPExcel/Writer/Excel2007.php");
-			$data = $dataGps->listDataRange($limiteInferior,$cantidadPuntos,$dispositivo);
+			$data = $dataGps->listDataRange($limiteInferior,$cantidadPuntos,$dispositivo, $tiempoCaptura);
 			$historial = new historial($limiteInferior,$cantidadPuntos,$dispositivo);
 			$historial->save();
 
@@ -60,7 +62,11 @@
 		    $objPHPExcel->getActiveSheet()->SetCellValue("B1", "Longitud");
 		    $objPHPExcel->getActiveSheet()->setCellValue("C1", "Altitud");
 		    $objPHPExcel->getActiveSheet()->setCellValue("D1", "Precision");
-		    $objPHPExcel->getActiveSheet()->setCellValue("E1", "Tiempo");
+		    $objPHPExcel->getActiveSheet()->setCellValue("E1", "Distancia");
+		    $objPHPExcel->getActiveSheet()->setCellValue("F1", "Velocidad");
+		    $objPHPExcel->getActiveSheet()->setCellValue("G1", "Direccion");
+		    $objPHPExcel->getActiveSheet()->setCellValue("H1", "Tiempo de Captura");
+		    $objPHPExcel->getActiveSheet()->setCellValue("I1", "Tiempo");
 		    $i = 2;
 			foreach($data as $row){
 				$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
@@ -77,13 +83,17 @@
 
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
 		    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("E".$i, $row["tiempo"]);
+		    	$objPHPExcel->getActiveSheet()->SetCellValue("E".$i, $row["distancia"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $row["velocidad"]);
+		    	$objPHPExcel->getActiveSheet()->SetCellValue("G".$i, $row["direccion"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $row["tiempoCaptura"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempo"]);
 		    	$i++;
 			}
 
 			//Titulo del libro y seguridad 
-			$objPHPExcel->getActiveSheet()->setTitle('DataApp');
-			$objPHPExcel->getSecurity()->setLockWindows(true);
+			$objPHPExcel->getActiveSheet()->setTitle('Data App');
+			$objPHPExcel->getSecurity()->setLockWindows(true); 
 			$objPHPExcel->getSecurity()->setLockStructure(true);
 			 
 			 
@@ -97,6 +107,10 @@
 			$objWriter->save('php://output');
 			return true;
 			break;
+
+		case "tiempoCaptura":
+			$data["tiempoCaptura"] = $dataGps->diferenteDispositivo(array("distinct" => "dataGps", "key" => "tiempoCaptura", "query" =>array("dispositivo"=>$dispositivo)));
+		break;
 	}
 
 	
