@@ -31,7 +31,7 @@ class dataGps extends ActiveMongo {
         $this->altitud = $altitud;
         $this->precision = $presicion;
         $this->tiempo = $tiempo;
-        $this->tiempoEntendible = $tiempoEntendible;
+       $this->tiempoEntendible = $tiempoEntendible;
         $this->proveedor = $proveedor;
         $this->dispositivo = $dispositivo;
         $this->distancia = $distancia;

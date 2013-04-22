@@ -87,7 +87,7 @@
 		    	$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $row["velocidad"]);
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("G".$i, $row["direccion"]);
 		    	$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $row["tiempoCaptura"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempo"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
 		    	$i++;
 			}
 

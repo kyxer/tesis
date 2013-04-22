@@ -33,7 +33,7 @@
 		$longitud = $val["longitud"];
 		$altitud = $val["altitud"];
 		$precision = $val["precision"];
-		$tiempo = (integer)$val["tiempo"]/1000;
+		$tiempo = (integer)$val["tiempo"];
 		$tiempoEntendible = gmdate("Y-m-d\TH:i:s\Z", $val["tiempo"]);
 		$proveedor = $val["proveedor"];
 		$dispositivo = $val["dispositivo"];
