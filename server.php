@@ -34,14 +34,13 @@
 		$altitud = $val["altitud"];
 		$precision = $val["precision"];
 		$tiempo = (integer)$val["tiempo"]/1000;
-		$tiempoEntendible = gmdate("d-m-Y H:i:s", $val["tiempo"]/1000);
 		$proveedor = $val["proveedor"];
 		$dispositivo = $val["dispositivo"];
 		$direccion = $val["direccion"];
 		$velocidad = $val["velocidad"];
 		$distancia = $val["distancia"];
 		$tiempoCaptura = $val["tiempo_captura"];
-		$registro = new dataGps($latitud, $longitud, $altitud, $precision, $tiempo, $tiempoEntendible, $proveedor, $dispositivo, $direccion, $velocidad, $distancia, $tiempoCaptura);
+		$registro = new dataGps($latitud, $longitud, $altitud, $precision, $tiempo, $proveedor, $dispositivo, $direccion, $velocidad, $distancia, $tiempoCaptura);
 
 		$registro->save();
 
