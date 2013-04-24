@@ -49,7 +49,7 @@
         </select>
         <label>-----</label>
         <label style="color: #FF9F40">Tiempo de captura: <label id="contTiempoCaptura"></label></label>
-        
+        <div ><label style="color: #FF9F40">Total de puntos existentes:</label><label id="tPuntos" style="color: black; margin-left:20px"></label></div>
       </p>
         <p><label>Indica el telefono o equipo que capturo los puntos</label></p>
         <p>
@@ -77,14 +77,22 @@
     for(var i = 0; i<data.length; i++){
 
       current = new google.maps.LatLng(data[i].latitud, data[i].longitud);
-      myloc = "Lat "+data[i].latitud+" Lon "+data[i].longitud+" Pres: "+ data[i].precision;
+      myloc = "<span style='font-weight:bold;color:black;'>Indice: </span>"+i
+      +"<br><span style='font-weight:bold;color:black;'> Velocidad: </span>"
+      +data[i].velocidad+"<br><span style='font-weight:bold;color:black;'> DistanciaApp: </span> "
+      + data[i].distancia+"<br><span style='font-weight:bold;color:black;'> DistanciaServer: </span>"
+      + data[i].distanciaServer+"<br>"
+      +"<span style='font-weight:bold;color:black;'> Direccion: </span> "
+      +data[i].direccion+"<br><span style='font-weight:bold;color:black;'> Lat:</span> "+data[i].latitud+"<br>"+
+      "<span style='font-weight:bold;color:black;'>Lon:</span> "+data[i].longitud+"<br>"+
+      "<span style='font-weight:bold;color:black;'> Pres:</span> "+ data[i].precision;
       markers.push(new google.maps.Marker({
           map: map,
           position: current,
           title: myloc
       }));
       markers[i]['infowin'] = new google.maps.InfoWindow({
-        content: '<div>This is a marker in ' + myloc + '</div>'
+        content: '<div>Esta marca es ' + myloc + '</div>'
       });
 
       google.maps.event.addListener(markers[i], 'click', function() {
@@ -108,11 +116,28 @@
               html +="<option value="+val+">"+val+"</option>";
             });
             $sel.html(html);
+            findTotal(val, data["tiempoCaptura"][0]);
           }
         });
       }
       
     });
+
+    $("#tiempoCaptura").live("change",function(){
+          var dispositivo = $("#dispositivo").val(), tiempoCaptura = $(this).val();
+          findTotal(dispositivo, tiempoCaptura);
+      });
+
+    var findTotal = function (dispositivo, tiempoCaptura) {
+        $.ajax({ url: "show.php", type: "GET", data:{tiempoCaptura:tiempoCaptura ,dispositivo:dispositivo, section:"count"}, dataType: "json", success: function(data){
+                
+                $("#tPuntos").html(data.count);
+                __CANTIDADPUNTOS = data.count;
+              },
+              error: function(data){
+                  console.log(arguments);
+              }});
+      }
 
 
     $(document).ready(function(){

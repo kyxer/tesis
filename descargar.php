@@ -140,8 +140,8 @@
             cantidadPuntos*= -1;
           cantidadPuntos|= 0;
 
-          window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
-          //window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
+          //window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
+          window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
 
         }
 

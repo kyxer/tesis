@@ -63,7 +63,7 @@ class dataGps extends ActiveMongo {
 
         $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo, "tiempoCaptura"=>$tiempoCaptura));
         $results->skip($page_start_index * $page_size)->limit($page_size);
-        $results->sort(array("tiempo" => -1));
+        $results->sort(array("tiempo" => 1));
         return $this->toArray($results);
     }
 
@@ -80,11 +80,11 @@ class dataGps extends ActiveMongo {
         return $this->_getCollection()->find(array("dispositivo"=>$dispositivo, "tiempoCaptura"=>$tiempoCaptura))->count();
     }
 
-    public function listDataRange($limiteInferior, $cantidadPuntos, $dispositivo){
+    public function listDataRange($limiteInferior, $cantidadPuntos, $dispositivo, $tiempoCaptura){
 
-        $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo));
+        $results = $this->_getCollection()->find(array("dispositivo"=>$dispositivo, "tiempoCaptura"=>$tiempoCaptura));
         $results->skip($limiteInferior)->limit($cantidadPuntos);
-        //$results->sort(array("createdAt" => -1));
+        $results->sort(array("tiempo" => 1));
         return $this->toArray($results);
     }
 

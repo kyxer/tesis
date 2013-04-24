@@ -31,6 +31,35 @@
 	switch ($section) {
 		case "index":
 			$data = $dataGps->listData($pageIndex,$pageSize,$dispositivo, $tiempoCaptura);
+			$endLatitud = 0;
+		    $endLongitud = 0;
+			foreach($data as $key => &$row){
+
+				if($key == 0){
+		    		$distanciaServer = 0;
+		    		$startLatitud = $row["latitud"];
+					$startLongitud = $row["longitud"];
+		    	}else{
+		    		if($endLatitud == 0){
+						$endLatitud = $row["latitud"];
+						$endLongitud = $row["longitud"];
+						
+					}else{
+						$startLatitud = $endLatitud;
+						$startLongitud = $endLongitud;
+						$endLatitud = $row["latitud"];
+						$endLongitud =  $row["longitud"];
+					}
+					 
+					$radius = 6378137; // earth mean radius defined by WGS84 in meters
+  					$dlon = $startLongitud - $endLongitud; 
+  					$distanciaServer = acos( sin(deg2rad($startLatitud)) * sin(deg2rad($endLatitud)) +  cos(deg2rad($startLatitud)) * cos(deg2rad($endLatitud)) * cos(deg2rad($dlon))) * $radius; 
+		    		
+		    	}
+		    	$row["distanciaServer"] = $distanciaServer;
+
+			}
+
 			break;
 		
 		case "count":
@@ -62,14 +91,17 @@
 		    $objPHPExcel->getActiveSheet()->SetCellValue("B1", "Longitud");
 		    $objPHPExcel->getActiveSheet()->setCellValue("C1", "Altitud");
 		    $objPHPExcel->getActiveSheet()->setCellValue("D1", "Precision");
-		    $objPHPExcel->getActiveSheet()->setCellValue("E1", "Distancia");
-		    $objPHPExcel->getActiveSheet()->setCellValue("F1", "Velocidad");
-		    $objPHPExcel->getActiveSheet()->setCellValue("G1", "Direccion");
-		    $objPHPExcel->getActiveSheet()->setCellValue("H1", "Tiempo de Captura");
-		    $objPHPExcel->getActiveSheet()->setCellValue("I1", "Tiempo");
-		    $objPHPExcel->getActiveSheet()->setCellValue("J1", "Tiempo entendible");
+		    $objPHPExcel->getActiveSheet()->setCellValue("E1", "Distancia App");
+		    $objPHPExcel->getActiveSheet()->setCellValue("F1", "Distancia Server");
+		    $objPHPExcel->getActiveSheet()->setCellValue("G1", "Velocidad");
+		    $objPHPExcel->getActiveSheet()->setCellValue("H1", "Direccion");
+		    $objPHPExcel->getActiveSheet()->setCellValue("I1", "Tiempo de Captura");
+		    $objPHPExcel->getActiveSheet()->setCellValue("J1", "Tiempo");
+		    $objPHPExcel->getActiveSheet()->setCellValue("K1", "Tiempo entendible");
 		    $i = 2;
-			foreach($data as $row){
+		    $endLatitud = 0;
+		    $endLongitud = 0;
+			foreach($data as $key => $row){
 				$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("B".$i, $row["longitud"]);
 		    	if(isset($row["precision"]))
@@ -82,15 +114,41 @@
 		    	else
 		    		$altitud = "";
 
+
+		    	if($key == 0){
+		    		$distanciaServer = 0;
+		    		$startLatitud = $row["latitud"];
+					$startLongitud = $row["longitud"];
+		    	}else{
+		    		if($endLatitud == 0){
+						$endLatitud = $row["latitud"];
+						$endLongitud = $row["longitud"];
+						
+					}else{
+						$startLatitud = $endLatitud;
+						$startLongitud = $endLongitud;
+						$endLatitud = $row["latitud"];
+						$endLongitud =  $row["longitud"];
+					}
+					 
+					$radius = 6378137; // earth mean radius defined by WGS84 in meters
+  					$dlon = $startLongitud - $endLongitud; 
+  					$distanciaServer = acos( sin(deg2rad($startLatitud)) * sin(deg2rad($endLatitud)) +  cos(deg2rad($startLatitud)) * cos(deg2rad($endLatitud)) * cos(deg2rad($dlon))) * $radius; 
+		    		
+		    	}
+
+    	
+    	
+
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
 		    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
 		    	$objPHPExcel->getActiveSheet()->SetCellValue("E".$i, $row["distancia"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $row["velocidad"]);
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("G".$i, $row["direccion"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $row["tiempoCaptura"]);
-
-		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempo"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
+		    	$objPHPExcel->getActiveSheet()->SetCellValue("F".$i, $distanciaServer);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $row["velocidad"]);
+		    	$objPHPExcel->getActiveSheet()->SetCellValue("H".$i, $row["direccion"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempoCaptura"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $row["tiempo"]);
+		    	$objPHPExcel->getActiveSheet()->setCellValue("K".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
 		    	$i++;
 			}
 
