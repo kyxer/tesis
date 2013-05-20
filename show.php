@@ -22,6 +22,10 @@
 		$cantidadPuntos = $_GET["cantidadPuntos"];
 	if(isset($_GET["section"]))
 		$section = $_GET["section"];
+	if(isset($_GET["repeat"]))
+		$repeat = 1;
+	else
+		$repeat = 0;
 
 
 	try{
@@ -102,8 +106,7 @@
 		    $endLatitud = 0;
 		    $endLongitud = 0;
 			foreach($data as $key => $row){
-				$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("B".$i, $row["longitud"]);
+				
 		    	if(isset($row["precision"]))
 		    		$precision = $row["precision"];
 		    	else
@@ -137,19 +140,37 @@
 		    		
 		    	}
 
-    	
-    	
+		    	if($key == 0 || $repeat == 1){
 
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("E".$i, $row["distancia"]);
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("F".$i, $distanciaServer);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $row["velocidad"]);
-		    	$objPHPExcel->getActiveSheet()->SetCellValue("H".$i, $row["direccion"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempoCaptura"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $row["tiempo"]);
-		    	$objPHPExcel->getActiveSheet()->setCellValue("K".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]));
-		    	$i++;
+	    			$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
+			    	$objPHPExcel->getActiveSheet()->SetCellValue("B".$i, $row["longitud"]);
+			    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
+			    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
+			    	$objPHPExcel->getActiveSheet()->SetCellValue("E".$i, $row["distancia"]);
+			    	$objPHPExcel->getActiveSheet()->SetCellValue("F".$i, $distanciaServer);
+			    	$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $row["velocidad"]);
+			    	$objPHPExcel->getActiveSheet()->SetCellValue("H".$i, $row["direccion"]);
+			    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempoCaptura"]);
+			    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $row["tiempo"]-16200);
+			    	$objPHPExcel->getActiveSheet()->setCellValue("K".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]-16200));
+			    	$i++;
+		    	}else{
+		    		if(!is_nan($distanciaServer) && $distanciaServer != 0 ){
+		    			$objPHPExcel->getActiveSheet()->SetCellValue("A".$i, $row["latitud"] );
+				    	$objPHPExcel->getActiveSheet()->SetCellValue("B".$i, $row["longitud"]);
+				    	$objPHPExcel->getActiveSheet()->SetCellValue("C".$i, $altitud);
+				    	$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $precision);
+				    	$objPHPExcel->getActiveSheet()->SetCellValue("E".$i, $row["distancia"]);
+				    	$objPHPExcel->getActiveSheet()->SetCellValue("F".$i, $distanciaServer);
+				    	$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $row["velocidad"]);
+				    	$objPHPExcel->getActiveSheet()->SetCellValue("H".$i, $row["direccion"]);
+				    	$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $row["tiempoCaptura"]);
+				    	$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $row["tiempo"]-16200);
+				    	$objPHPExcel->getActiveSheet()->setCellValue("K".$i, gmdate("d-m-Y H:i:s", $row["tiempo"]-16200));
+				    	$i++;
+
+		    		}
+		    	}
 			}
 
 			//Titulo del libro y seguridad 

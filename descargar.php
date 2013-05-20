@@ -39,7 +39,8 @@
         <p><label>Total de puntos existentes:</label><label id="tPuntos" style="color: black; margin-left:20px">0</label></p>
         <p><label>Limite inferior:</label> <input id="limiteInferior" type="text" /></p>
         <p><label>Cantidad de puntos:</label> <input id="cantidadPuntos" type="text" /></p>
-        <p style="text-align:center"><input id="bDescarga" type="button" value="Descargar" /></p>
+        <p style="text-align:center"><input t="b" class="bDescarga" type="button" value="Descargar Data Bruta" /></p>
+        <p style="text-align:center"><input t="f" class="bDescarga" type="button" value="Descargar Data Filtrada" /></p>
         <h2>Historial de descarga</h2>
         <div id="containerHistorial">
 
@@ -100,7 +101,7 @@
               }});
       }
 
-      $("#bDescarga").on("click", function(){
+      $(".bDescarga").on("click", function(){
         var dispositivo = $("#dispositivo").val(), 
         limiteInferior = $("#limiteInferior").val(), 
         cantidadPuntos = $("#cantidadPuntos").val(),
@@ -140,9 +141,13 @@
             cantidadPuntos*= -1;
           cantidadPuntos|= 0;
 
-          //window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
-          window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
 
+          if($(this).attr("t") == "f"){
+          //window.location = "http://tesis.codesign.me/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
+            window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga";
+          }else{
+            window.location = "http://localhost/tesis/show.php?cantidadPuntos="+cantidadPuntos+"&limiteInferior="+limiteInferior+"&dispositivo="+dispositivo+"&tiempoCaptura="+tiempoCaptura+"&section=descarga&repeat=1";
+          }
         }
 
 
